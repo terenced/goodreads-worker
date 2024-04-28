@@ -28,11 +28,11 @@ export default {
 			const currentlyReading = await fetchGoodreads(env.GOODREADS_URL);
 			console.log(`currently reading trigger at ${event.cron}`, currentlyReading);
 
-			env.SB_KV.put('currently-reading', JSON.stringify(currentlyReading), {
+			await env.SB_KV.put('currently-reading', JSON.stringify(currentlyReading), {
 				metadata: { timestamp: event.cron },
 			});
 		} catch (err) {
-			env.SB_KV.put('currently-reading-error', JSON.stringify(err), {
+			await env.SB_KV.put('currently-reading-error', JSON.stringify(err), {
 				metadata: {
 					timestamp: event.cron,
 				},
