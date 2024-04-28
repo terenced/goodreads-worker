@@ -26,8 +26,6 @@ export default {
 	async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
 		try {
 			const currentlyReading = await fetchGoodreads(env.GOODREADS_URL);
-			console.log(`currently reading trigger at ${event.cron}`, currentlyReading);
-
 			await env.SB_KV.put('currently-reading', JSON.stringify(currentlyReading), {
 				metadata: { timestamp: event.cron },
 			});
@@ -37,7 +35,7 @@ export default {
 					timestamp: event.cron,
 				},
 			});
-			console.error(`error in trigger at ${event.cron}`, err);
+			console.error(`error in trigger at ${event.scheduledTime}`, err);
 		}
 	},
 };
