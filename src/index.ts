@@ -1,9 +1,9 @@
 import { parseHTML } from 'linkedom';
 
 async function fetchGoodreads(url: string) {
-	const response = await fetch(URL);
+	const response = await fetch(url);
 	if (!response.ok) {
-		throw new Error(`Failed to fetch ${URL}: ${response.statusText}`);
+		throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
 	}
 	const html = await response.text();
 	const { document } = parseHTML(html);
@@ -25,7 +25,7 @@ async function fetchGoodreads(url: string) {
 export default {
 	async scheduled(event: ScheduledEvent, env: Env, _ctx: ExecutionContext): Promise<void> {
 		try {
-			const currentlyReading = await fetchGoodreads('');
+			const currentlyReading = await fetchGoodreads(env.GOODREADS_URL);
 			env.SB_KV.put('currently-reading', JSON.stringify(currentlyReading), {
 				metadata: { timestamp: event.cron },
 			});
